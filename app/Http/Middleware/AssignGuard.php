@@ -2,12 +2,11 @@
 
 namespace App\Http\Middleware;
 
-use App\Providers\RouteServiceProvider;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class RedirectIfAuthenticated
+class AssignGuard
 {
     /**
      * Handle an incoming request.
@@ -18,11 +17,12 @@ class RedirectIfAuthenticated
      * @param  string|null  $redirectTo
      * @return mixed
      */
-    public function handle(Request $request, Closure $next, $guard = null, $redirectTo = RouteServiceProvider::HOME)
+    public function handle(Request $request, Closure $next, $guard = null, $redirectTo = '/login')
     {
-        if (Auth::guard($guard)->check())
+        if (!Auth::guard($guard)->check())
             return redirect($redirectTo);
 
+        Auth::shouldUse($guard);
         return $next($request);
     }
 }
