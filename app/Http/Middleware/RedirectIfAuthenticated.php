@@ -14,18 +14,21 @@ class RedirectIfAuthenticated
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Closure  $next
-     * @param  string|null  ...$guards
+     * @param  string|null  ...$guard
      * @return mixed
      */
-    public function handle(Request $request, Closure $next, ...$guards)
+    public function handle(Request $request, Closure $next, $guard = null)
     {
-        $guards = empty($guards) ? [null] : $guards;
 
-        foreach ($guards as $guard) {
-            if (Auth::guard($guard)->check()) {
-                return redirect(RouteServiceProvider::HOME);
-            }
-        }
+        $destrnations = [
+            'admin' => 'admin.home',
+            'moderator' => 'moderator.home',
+            'user' => RouteServiceProvider::HOME,
+        ];
+
+        if (Auth::guard($guard)->check())
+            return redirect()->route($destrnations[Auth::user()->role]);
+
 
         return $next($request);
     }
