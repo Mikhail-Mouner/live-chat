@@ -19,6 +19,13 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', [\App\Http\Controllers\HomeController::class, 'index'])->name('home');
-Route::get('/admin/home', [\App\Http\Controllers\AdminController::class, 'index'])->name('admin.home');
-Route::get('/moderator/home', [\App\Http\Controllers\ModeratorController::class, 'index'])->name('moderator.home');
+
+Route::prefix('admin')->group(function () {
+    Route::get('/', [\App\Http\Controllers\AdminController::class, 'index'])->name('admin');
+    Route::get('/home', [\App\Http\Controllers\AdminController::class, 'index'])->name('admin.home');
+});
+Route::prefix('moderator')->group(function () {
+    Route::get('/', [\App\Http\Controllers\ModeratorController::class, 'index'])->name('moderator');
+    Route::get('/home', [\App\Http\Controllers\ModeratorController::class, 'index'])->name('moderator.home');
+});
 
