@@ -20,3 +20,27 @@ Auth::routes();
 
 Route::get('/home', [\App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
+
+Route::group([
+    "prefix" => "admin"
+],function() {
+    Route::get("login", [\App\Http\Controllers\Auth\AdminLoginController::class, 'showLoginForm'])->name("admin.show_login");
+    Route::post("login", [\App\Http\Controllers\Auth\AdminLoginController::class, 'login'])->name("admin.do_login");
+    Route::post("logout", [\App\Http\Controllers\Auth\AdminLoginController::class, 'logout'])->name("admin.logout");
+});
+
+Route::prefix('admin')
+    ->middleware(['assign.guard:admin/login'])
+    ->group(function () {
+
+        Route::get('/dashboard', [\App\Http\Controllers\AdminController::class, 'index'])->name('dashboard');
+
+        Route::get('/just-for-admins', function () {
+            return 'Just For Admins';
+        })->name('admin.home')->middleware('role:administrator');
+
+        Route::get('/just-for-moderators', function () {
+            return 'Just For Moderators';
+        })->name('moderator.home')->middleware('role:administrator|moderator');
+    });
+
