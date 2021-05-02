@@ -30,7 +30,7 @@ Route::group([
 });
 
 Route::prefix('admin')
-    ->middleware(['assign.guard:admin/login'])
+    ->middleware(['assign.guard:admin,admin/login'])
     ->group(function () {
 
         Route::get('/dashboard', [\App\Http\Controllers\AdminController::class, 'index'])->name('dashboard');
