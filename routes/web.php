@@ -31,6 +31,13 @@ Route::group([
     Route::get("login", [\App\Http\Controllers\Auth\AdminLoginController::class, 'showLoginForm'])->name("admin.show_login");
     Route::post("login", [\App\Http\Controllers\Auth\AdminLoginController::class, 'login'])->name("admin.do_login");
     Route::post("logout", [\App\Http\Controllers\Auth\AdminLoginController::class, 'logout'])->name("admin.logout");
+
+    //Reset Password
+    Route::get('password/reset', [\App\Http\Controllers\Auth\ForgotPasswordAdminController::class, 'showLinkRequestForm'])->name('admin.password.request');
+    Route::post('password/email', [\App\Http\Controllers\Auth\ForgotPasswordAdminController::class, 'sendResetLinkEmail'])->name('admin.password.email');
+    Route::get('password/reset/{token}/{email}', [\App\Http\Controllers\Auth\ResetPasswordAdminController::class, 'showResetForm'])->name('admin.password.reset');
+    Route::post('password/reset', [\App\Http\Controllers\Auth\ResetPasswordAdminController::class, 'reset'])->name('admin.password.update');
+
 });
 
 Route::prefix('admin')
